@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 const courses = [
     {
         title: 'JavaScript Moderno Guía Definitiva Construye +10 Proyectos',
@@ -25,9 +27,21 @@ const resolvers = {
         }
     }, 
     Mutation: {
-        newUser: (_, {data}) => {
-            console.log(data);
-            return 'Creating new user';
+        newUser: async (_, {data}) => {
+            const { email } = data;
+            const userExists = await User.findOne({email})
+
+            console.log('userExists', userExists);
+            if(userExists){
+                throw new Error('The user already exists')
+            }
+            try {
+                const newUser = new User(data);
+                await newUser.save();
+                return newUser;
+            } catch(e){
+                console.log(e)
+            }
         }
     }
 }
