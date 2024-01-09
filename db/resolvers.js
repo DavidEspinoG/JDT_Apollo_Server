@@ -23,6 +23,12 @@ const resolvers = {
             const res = courses.filter((course) => course.technology === technology);
             return res; 
         }
+    }, 
+    Mutation: {
+        newUser: (_, {data}) => {
+            console.log(data);
+            return 'Creating new user';
+        }
     }
 }
 
