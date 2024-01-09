@@ -1,46 +1,50 @@
 const User = require('../models/user');
-
-const courses = [
-    {
-        title: 'JavaScript Moderno Guía Definitiva Construye +10 Proyectos',
-        technology: 'JavaScript ES6',
-    },
-    {
-        title: 'React – La Guía Completa: Hooks Context Redux MERN +15 Apps',
-        technology: 'React',
-    },
-    {
-        title: 'Node.js – Bootcamp Desarrollo Web inc. MVC y REST API’s',
-        technology: 'Node.js'
-    }, 
-    {
-        title: 'ReactJS Avanzado – FullStack React GraphQL y Apollo',
-        technology: 'React'
-    }
-];
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config({ path: './.env' });
 
 const resolvers = {
     Query: {
-        getCourses: (_, {technology}) => {
-            const res = courses.filter((course) => course.technology === technology);
-            return res; 
+        getUserFromToken: (_, { token }) => {
+            const dataFromToken = jwt.verify(token, process.env.JWT_SECRET)
+            return dataFromToken;
         }
     }, 
     Mutation: {
-        newUser: async (_, {data}) => {
-            const { email } = data;
+        newUser: async (_, { data }) => {
+            const { email, password } = data;
             const userExists = await User.findOne({email})
+            const salt = bcrypt.genSaltSync(10);
+            const hash = await bcrypt.hash(password, salt);
 
-            console.log('userExists', userExists);
             if(userExists){
                 throw new Error('The user already exists')
             }
             try {
-                const newUser = new User(data);
+                const newUser = new User({...data, password: hash});
                 await newUser.save();
                 return newUser;
             } catch(e){
                 console.log(e)
+            }
+        }, 
+        authenticateUser: async (_, { data }) => {
+            const { email, password } = data;
+            const user = await User.findOne({email});
+            if(!user){
+                throw new Error('The email doesn\'t exist')
+            }
+            const isPasswordCorrect = await bcrypt.compare(password, user.password);
+            if(!isPasswordCorrect){
+                throw new Error('The password is not correct');
+            }
+            const payload = { id: user.id,
+                name: user.name,
+                lastName: user.lastName,
+                email: user.email,
+            };
+            return {
+                token: jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '24h'})
             }
         }
     }

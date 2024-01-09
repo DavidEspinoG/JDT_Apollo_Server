@@ -6,6 +6,10 @@ const typeDefs = gql`
         technology: String
     }
 
+    type Token {
+        token: String
+    }
+
     type User {
         id: ID
         name: String
@@ -15,7 +19,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        getCourses(technology: String) : [Course]
+        getUserFromToken(token: String) : User
     }
 
     input newUserInput {
@@ -25,9 +29,16 @@ const typeDefs = gql`
         password: String!
     }
 
+    input authenticateUserInput {
+        email: String!
+        password: String!
+    }
+
     type Mutation {
         newUser(data: newUserInput): User
+        authenticateUser(data: authenticateUserInput): Token
     }
+
 `;
 
 module.exports = typeDefs;
