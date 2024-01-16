@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Product = require('../models/product');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: './.env' });
@@ -46,7 +47,16 @@ const resolvers = {
             return {
                 token: jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '24h'})
             }
-        }
+        }, 
+        newProduct: async (_, { data }) => {
+            try {
+                const product = new Product(data);
+                const res = await product.save();
+                return res; 
+            } catch(e) {
+                console.log(e);
+            }
+        },
     }
 }
 
