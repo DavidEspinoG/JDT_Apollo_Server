@@ -44,7 +44,7 @@ const typeDefs = gql`
         password: String!
     }
     
-    input newProductInput {
+    input NewProductInput {
         name: String!
         items: Int!
         price: Float!
@@ -55,7 +55,8 @@ const typeDefs = gql`
         newUser(data: newUserInput): User
         authenticateUser(data: authenticateUserInput): Token
         # Product 
-        newProduct(data: newProductInput) : Product
+        newProduct(data: NewProductInput) : Product
+        updateProduct(id: ID!, input: NewProductInput) : Product
     }
 
 `;

@@ -76,6 +76,18 @@ const resolvers = {
                 console.log(e);
             }
         },
+        updateProduct: async (_, {id, input}) => {
+            const product = await Product.findById(id);
+            if(!product){
+                throw new Error('The product doesn\'t exist')
+            }
+            try {
+                const updatedProduct = await Product.findOneAndUpdate({_id: id}, input, {new: true});
+                return updatedProduct;
+            } catch(e){
+                console.log(e);
+            }
+        },
     }
 }
 
