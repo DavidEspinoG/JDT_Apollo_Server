@@ -28,6 +28,8 @@ const typeDefs = gql`
 
     type Query {
         getUserFromToken(token: String) : User
+        getProducts: [Product]
+        getProduct(id: ID!) : Product
     }
 
     input newUserInput {

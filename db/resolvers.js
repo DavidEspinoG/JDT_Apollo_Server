@@ -9,6 +9,25 @@ const resolvers = {
         getUserFromToken: (_, { token }) => {
             const dataFromToken = jwt.verify(token, process.env.JWT_SECRET)
             return dataFromToken;
+        }, 
+        getProducts: async () => {
+            try {
+                const products = await Product.find({});
+                return products;
+            } catch(e) {
+                console.log(e);
+            }
+        }, 
+        getProduct: async (_, { id }) => {
+            try {
+                const product = await Product.findById(id);
+                if(!product){
+                    throw new Error('Product doesn\'t exist')
+                }
+                return product;
+            } catch(e) {
+                console.log(e);
+            }
         }
     }, 
     Mutation: {
