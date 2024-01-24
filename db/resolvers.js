@@ -88,6 +88,18 @@ const resolvers = {
                 console.log(e);
             }
         },
+        deleteProduct: async (_, {id}) => {
+            const product = await Product.findById(id);
+            if(!product){
+                throw new Error('The product doesn\'t exist')
+            }
+            try {
+                const result = await Product.findOneAndDelete({_id: id})
+                return `${result.name} deleted`
+            } catch(e){
+                console.log(e);
+            }
+        }
     }
 }
 
