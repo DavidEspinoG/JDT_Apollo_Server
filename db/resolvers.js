@@ -32,7 +32,7 @@ const resolvers = {
         }
     }, 
     Mutation: {
-        newUser: async (_, { data }) => {
+        newUClient: async (_, { data }) => {
             const { email, password } = data;
             const userExists = await User.findOne({email})
             const salt = bcrypt.genSaltSync(10);
