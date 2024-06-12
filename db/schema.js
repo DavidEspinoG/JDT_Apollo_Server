@@ -27,7 +27,8 @@ const typeDefs = gql`
     }
 
     type Client {
-        id: ID 
+        id: ID
+        password: String 
         name: String
         lastName: String
         company: String
@@ -39,6 +40,7 @@ const typeDefs = gql`
         getUserFromToken(token: String) : User
         getProducts: [Product]
         getProduct(id: ID!) : Product
+        getAllClients: [Client]
     }
 
     input newUserInput {
@@ -61,6 +63,7 @@ const typeDefs = gql`
 
     input ClientInput {
         name: String!
+        password: String
         lastName: String!
         company: String!
         email: String!

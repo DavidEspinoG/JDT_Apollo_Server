@@ -7,6 +7,18 @@ require('dotenv').config({ path: './.env' });
 
 const resolvers = {
     Query: {
+        getAllClients: async () => {
+            try {
+                const clients = await Client.find({});
+                console.log(clients)
+                return clients;
+            } catch (error) {
+                console.log(error);
+                return {
+                    message: "Internal server error",
+                }
+            }
+        },
         getUserFromToken: (_, { token }) => {
             const dataFromToken = jwt.verify(token, process.env.JWT_SECRET)
             return dataFromToken;
@@ -32,9 +44,9 @@ const resolvers = {
         }
     }, 
     Mutation: {
-        newUClient: async (_, { data }) => {
-            const { email, password } = data;
-            const userExists = await User.findOne({email})
+        newClient: async (_, { input } ) => {
+            const { email, password } = input;
+            const userExists = await Client.findOne({email})
             const salt = bcrypt.genSaltSync(10);
             const hash = await bcrypt.hash(password, salt);
 
@@ -42,7 +54,8 @@ const resolvers = {
                 throw new Error('The user already exists')
             }
             try {
-                const newUser = new User({...data, password: hash});
+                const newUser = new Client({...input, password: hash});
+                newUser.seller = '659d89c836c272953fc6abda'
                 await newUser.save();
                 return newUser;
             } catch(e){
