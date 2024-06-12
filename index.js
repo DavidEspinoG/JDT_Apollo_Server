@@ -1,6 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./db/schema');
-const resolvers = require('./db/resolvers');
+const resolvers = require('./resolvers/resolvers');
 const connectDB = require('./config/db');
 const jwt = require('jsonwebtoken');
 
