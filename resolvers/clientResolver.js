@@ -15,6 +15,14 @@ const clientResolver = {
                 }
             }
         },
+        getClientsBySeller: async (_, { input }, ctx) => {
+            try {
+                const clients = await Client.find({ seller: ctx.user.id.toString() });
+                return clients;
+            } catch (e) {
+                console.log(e);
+            }
+        },
     }, 
     Mutation: {
         newClient: async (_, { input }, ctx ) => {

@@ -41,6 +41,7 @@ const typeDefs = gql`
         getProducts: [Product]
         getProduct(id: ID!) : Product
         getAllClients: [Client]
+        getClientsBySeller: [Client]
     }
 
     input newUserInput {
