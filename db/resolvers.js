@@ -44,7 +44,26 @@ const resolvers = {
         }
     }, 
     Mutation: {
-        newClient: async (_, { input } ) => {
+        newUser: async (_, { data : input }) => {
+            const { email, password } = input;
+            const userExists = await User.findOne({email})
+             if(userExists) {
+                throw new Error('The user already exists');
+             }
+             try {  
+                const salt = bcrypt.genSaltSync(10);
+                const hash = await bcrypt.hash(password, salt);
+                const newUser = new User({...input, password: hash});
+                await newUser.save();
+                return newUser;
+             } catch(e) {
+                console.log(e);
+             }
+        },
+        newClient: async (_, { input }, ctx ) => {
+            if(!ctx.user.id) {
+                throw new Error('Unauthorized');
+            }
             const { email, password } = input;
             const userExists = await Client.findOne({email})
             const salt = bcrypt.genSaltSync(10);
@@ -54,10 +73,10 @@ const resolvers = {
                 throw new Error('The user already exists')
             }
             try {
-                const newUser = new Client({...input, password: hash});
-                newUser.seller = '659d89c836c272953fc6abda'
-                await newUser.save();
-                return newUser;
+                const newClient = new Client({...input, password: hash});
+                newClient.seller = ctx.user.id;
+                await newClient.save();
+                return newClient;
             } catch(e){
                 console.log(e)
             }
@@ -72,7 +91,8 @@ const resolvers = {
             if(!isPasswordCorrect){
                 throw new Error('The password is not correct');
             }
-            const payload = { id: user.id,
+            const payload = { 
+                id: user.id,
                 name: user.name,
                 lastName: user.lastName,
                 email: user.email,
