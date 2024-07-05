@@ -1,6 +1,8 @@
 const Client = require('../models/client');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const user = require('../models/user');
+const verifyUserExistAndIsAuthorized = require('./utils/verifyUserExistAndIsAuthorized');
 
 const clientResolver = {
     Query: {
@@ -22,6 +24,17 @@ const clientResolver = {
             } catch (e) {
                 console.log(e);
             }
+        },
+        getClientById: async(_, { id }, ctx) => {
+            try {
+                const client = await Client.findById(id);
+                verifyUserExistAndIsAuthorized(client, ctx);
+                return client;
+            } catch(e) {
+                console.log(e)
+                return { message: 'debugging'}
+            }
+            // return client
         },
     }, 
     Mutation: {
@@ -45,7 +58,7 @@ const clientResolver = {
             } catch(e){
                 console.log(e)
             }
-        }, 
+        }
     }
 };
 

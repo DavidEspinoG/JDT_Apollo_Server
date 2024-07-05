@@ -35,6 +35,7 @@ const typeDefs = gql`
         email: String
         phoneNumber: String
         seller: ID
+        user: User
     }
     type Query {
         getUserFromToken(token: String) : User
@@ -42,6 +43,7 @@ const typeDefs = gql`
         getProduct(id: ID!) : Product
         getAllClients: [Client]
         getClientsBySeller: [Client]
+        getClientById(id: ID!): Client
     }
 
     input newUserInput {

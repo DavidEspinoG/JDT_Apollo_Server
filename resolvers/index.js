@@ -1,4 +1,3 @@
-const Product = require('../models/product');
 const clientResolver = require('./clientResolver');
 const userResolver = require('./userResolver');
 const productResolver = require('./productResolver');
