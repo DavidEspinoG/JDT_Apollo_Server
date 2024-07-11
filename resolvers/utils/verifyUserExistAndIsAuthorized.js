@@ -5,7 +5,7 @@ const verifyUserExistsAndIsAuthorized = (client, ctx) => {
     if(!client) {
         return new Error('Not found');
     }
-    if(clientSellerID !== userID) {
+    if((clientSellerID !== userID) || !ctx) {
         throw new Error('Unauthorized');
     }
 };
