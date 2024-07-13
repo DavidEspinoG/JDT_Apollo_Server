@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const user = require('../models/user');
 const verifyUserExistAndIsAuthorized = require('./utils/verifyUserExistAndIsAuthorized');
-
+const { UserInputError, AuthenticationError } = require('apollo-server');
 const clientResolver = {
     Query: {
         getAllClients: async () => {
@@ -38,27 +38,29 @@ const clientResolver = {
         },
     }, 
     Mutation: {
-        newClient: async (_, { input }, ctx ) => {
-            if(!ctx.user.id) {
-                throw new Error('Unauthorized');
+        newClient: async (_, { data }, ctx ) => {
+            if(!ctx.user?.id) {
+                throw new AuthenticationError('Unauthorized');
             }
-            const { email, password } = input;
-            const userExists = await Client.findOne({email})
+            const { email, password } = data;
+            const clientExists = await Client.findOne({email})
             const salt = bcrypt.genSaltSync(10);
             const hash = await bcrypt.hash(password, salt);
 
-            if(userExists){
-                throw new Error('The user already exists')
+            if(clientExists){
+                throw new UserInputError('The client already exists')
             }
             try {
-                const newClient = new Client({...input, password: hash});
+                const newClient = new Client({...data, password: hash});
                 newClient.seller = ctx.user.id;
                 await newClient.save();
                 return newClient;
             } catch(e){
                 console.log(e)
+                throw new UserInputError(e.message);
             }
-        }
+        },
+        // updateClient: U
     }
 };
 

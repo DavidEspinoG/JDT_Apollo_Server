@@ -66,11 +66,11 @@ const typeDefs = gql`
 
     input ClientInput {
         name: String!
-        password: String
+        password: String!
         lastName: String!
-        company: String!
+        company: String
         email: String!
-        phoneNumber: String!
+        phoneNumber: String
         createdAt: String
     }
 
@@ -83,9 +83,10 @@ const typeDefs = gql`
         updateProduct(id: ID!, input: NewProductInput) : Product
         deleteProduct(id: ID!) : String
         # Client
-        newClient(input: ClientInput) : Client
+        newClient(data: ClientInput) : Client
+        updateClient(id: ID!, input: ClientInput) : Client
     }
-
+    
 `;
 
 module.exports = typeDefs;

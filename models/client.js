@@ -18,7 +18,7 @@ const ClientSchema = mongoose.Schema({
     },
     company: {
         type: String, 
-        required: true, 
+        required: false, 
         trim: true,
     }, 
     email: {
@@ -29,12 +29,11 @@ const ClientSchema = mongoose.Schema({
     }, 
     phoneNumber: {
         type: String, 
-        trim: true,
+        trim: false,
     }, 
     createdAt: {
         type: Date,
         default: Date.now(),
-
     }, 
     seller: {
         type: mongoose.Schema.Types.ObjectId,

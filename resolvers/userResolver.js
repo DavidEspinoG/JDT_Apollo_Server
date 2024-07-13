@@ -11,8 +11,8 @@ const userResolver = {
         
     },
     Mutation: {
-        newUser: async (_, { data : input }) => {
-            const { email, password } = input;
+        newUser: async (_, { data }) => {
+            const { email, password } = data;
             const userExists = await User.findOne({email})
              if(userExists) {
                 throw new Error('The user already exists');
@@ -20,7 +20,7 @@ const userResolver = {
              try {  
                 const salt = bcrypt.genSaltSync(10);
                 const hash = await bcrypt.hash(password, salt);
-                const newUser = new User({...input, password: hash});
+                const newUser = new User({...data, password: hash});
                 await newUser.save();
                 return newUser;
              } catch(e) {
