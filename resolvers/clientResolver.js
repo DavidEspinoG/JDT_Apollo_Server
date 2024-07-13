@@ -60,7 +60,17 @@ const clientResolver = {
                 throw new UserInputError(e.message);
             }
         },
-        // updateClient: U
+        updateClient: async (_, {email, data} , ctx) => {
+            let client = await Client.findOne({ email });
+            verifyUserExistAndIsAuthorized(client, ctx);
+            try {
+                client = Client.findOneAndUpdate({ email }, data, {new: true})
+            } catch(e) {
+                console.log(e);
+                throw new Error(e.message);
+            }
+            return client; 
+        }
     }
 };
 

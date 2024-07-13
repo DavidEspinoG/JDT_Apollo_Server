@@ -74,6 +74,15 @@ const typeDefs = gql`
         createdAt: String
     }
 
+    input updateClientInput {
+        name: String
+        password: String
+        lastName: String
+        company: String
+        email: String
+        phoneNumber: String
+    }
+
     type Mutation {
         # User
         newUser(data: newUserInput): User
@@ -84,7 +93,7 @@ const typeDefs = gql`
         deleteProduct(id: ID!) : String
         # Client
         newClient(data: ClientInput) : Client
-        updateClient(id: ID!, input: ClientInput) : Client
+        updateClient(email: String!, data: updateClientInput!) : Client
     }
     
 `;
