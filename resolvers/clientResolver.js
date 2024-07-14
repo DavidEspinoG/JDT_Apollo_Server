@@ -34,7 +34,6 @@ const clientResolver = {
                 console.log(e)
                 return { message: 'debugging'}
             }
-            // return client
         },
     }, 
     Mutation: {
@@ -70,6 +69,16 @@ const clientResolver = {
                 throw new Error(e.message);
             }
             return client; 
+        }, 
+        deleteClient: async (_, {id}, ctx) => {
+            let client = await Client.findById(id);
+            verifyUserExistAndIsAuthorized(client, ctx);
+            try {
+                await Client.findByIdAndDelete(id);
+                return `Client with id ${id} succesfully deleted`;
+            } catch(e){
+                throw new Error(e.message);
+            }
         }
     }
 };
