@@ -60,11 +60,11 @@ const clientResolver = {
                 throw new UserInputError(e.message);
             }
         },
-        updateClient: async (_, {email, data} , ctx) => {
-            let client = await Client.findOne({ email });
+        updateClient: async (_, {id, data} , ctx) => {
+            let client = await Client.findById(id);
             verifyUserExistAndIsAuthorized(client, ctx);
             try {
-                client = Client.findOneAndUpdate({ email }, data, {new: true})
+                client = Client.findOneAndUpdate({ _id: id }, data, {new: true})
             } catch(e) {
                 console.log(e);
                 throw new Error(e.message);

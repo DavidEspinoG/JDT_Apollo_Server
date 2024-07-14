@@ -93,7 +93,7 @@ const typeDefs = gql`
         deleteProduct(id: ID!) : String
         # Client
         newClient(data: ClientInput) : Client
-        updateClient(email: String!, data: updateClientInput!) : Client
+        updateClient(id: ID!, data: updateClientInput!) : Client
     }
     
 `;
