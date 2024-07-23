@@ -105,7 +105,6 @@ const typeDefs = gql`
         products: [OrderProductInput]!
         total: Float!
         client: ID!
-        seller: ID!
         state: OrderState
     }
 
