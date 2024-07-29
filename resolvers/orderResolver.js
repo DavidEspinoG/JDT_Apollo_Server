@@ -3,10 +3,41 @@ const verifyUserExistsAndIsAuthorized = require("./utils/verifyUserExistAndIsAut
 const Client = require('../models/client');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const { UserInputError } = require("apollo-server");
+const User = require('../models/user');
 
 const orderResolver = {
     Query: {
-
+        getAllOrders: async () => {
+            try {
+                const orders = await Order.find({});
+                return orders;
+            } catch(e) {
+                console.log(e);
+            }
+        },
+        getOrdersBySeller: async(_, data, ctx) => {
+            try {
+                const orders = await Order.find({ seller: ctx.user.id});
+                return orders;
+            } catch(e) {
+                console.log(e);
+            }
+        }, 
+        getOrderById: async(_, { id }, ctx) => {
+            try {
+                const order = await Order.findById(id);
+                if(!order) {
+                    throw new Error('order not found')
+                } 
+                if(order.seller._id.toString() !== ctx.user.id){
+                    throw new Error('Unauthorized')
+                }
+                return order;
+            } catch(e) {
+                console.log(e);
+            }
+        }
     }, 
     Mutation: {
         newOrder: async (_, {data}, ctx) => {
@@ -32,6 +63,39 @@ const orderResolver = {
             // Save it in DB
             const res = await newOrder.save();
             return res; 
+        }, 
+        updateOrder: async (_, { id, input}, ctx) => {
+            // verify order exists 
+            const order = await Order.findById(id);
+            if(!order) {
+                throw new Error('Order not found');
+            }
+            // Verify client exists 
+            const client = await User.findById(ctx.user?.id);
+            console.log(client)
+            console.log(ctx)
+            if(!client) {
+                throw new Error('Client not found');
+            }
+            if(order.seller._id.toString() !== ctx.user.id) {
+                throw new Error('Unauthorized');
+            }
+            // Check stock
+            const { products } = input;
+            if(products) {
+                for await (const product of products) {
+                    const stockProduct = await Product.findById(product?.id);
+                    if(product.quantity > stockProduct.items){
+                        throw new Error(`Not enough stock`)
+                    } else {
+                        stockProduct.items = stockProduct.items - product.quantity
+                        await stockProduct.save();
+                    }
+                }
+            }
+            
+            const res = await Order.findOneAndUpdate({_id: id}, input, { new: true});
+            return res;
         }
     }
 };

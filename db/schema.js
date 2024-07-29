@@ -44,6 +44,10 @@ const typeDefs = gql`
         getAllClients: [Client]
         getClientsBySeller: [Client]
         getClientById(id: ID!): Client
+        # Orders
+        getAllOrders: [Order]
+        getOrdersBySeller: [Order]
+        getOrderById(id: ID!) : Order
     }
 
     input newUserInput {
@@ -102,9 +106,9 @@ const typeDefs = gql`
     }
 
     input NewOrderInput {
-        products: [OrderProductInput]!
-        total: Float!
-        client: ID!
+        products: [OrderProductInput]
+        total: Float
+        client: ID
         state: OrderState
     }
 
@@ -128,7 +132,7 @@ const typeDefs = gql`
         deleteClient(id: ID!) : String
         # Order
         newOrder(data: NewOrderInput) : Order
-
+        updateOrder(id: ID!, input: NewOrderInput) : Order
     }
     
 `;
