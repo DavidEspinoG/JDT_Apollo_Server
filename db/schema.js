@@ -37,19 +37,6 @@ const typeDefs = gql`
         seller: ID
         user: User
     }
-    type Query {
-        getUserFromToken(token: String) : User
-        getProducts: [Product]
-        getProduct(id: ID!) : Product
-        getAllClients: [Client]
-        getClientsBySeller: [Client]
-        getClientById(id: ID!): Client
-        # Orders
-        getAllOrders: [Order]
-        getOrdersBySeller: [Order]
-        getOrderById(id: ID!) : Order
-        getOrdersByState(state: OrderState) : [Order]
-    }
 
     input newUserInput {
         name: String!
@@ -119,6 +106,22 @@ const typeDefs = gql`
         CANCELED
     }
 
+    type Query {
+        getUserFromToken(token: String) : User
+        getProducts: [Product]
+        getProduct(id: ID!) : Product
+        getAllClients: [Client]
+        getClientsBySeller: [Client]
+        getClientById(id: ID!): Client
+        # Orders
+        getAllOrders: [Order]
+        getOrdersBySeller: [Order]
+        getOrderById(id: ID!) : Order
+        getOrdersByState(state: OrderState) : [Order]
+        # Special queries
+        getTopClients: [TopClient]
+    }
+
     type Mutation {
         # User
         newUser(data: newUserInput): User
@@ -137,6 +140,11 @@ const typeDefs = gql`
         deleteOrder(id: ID!) : String
     }
     
+    type TopClient {
+        total: Float
+        client: [Client]
+    }
+
 `;
 
 module.exports = typeDefs;

@@ -2,7 +2,7 @@ const clientResolver = require('./clientResolver');
 const userResolver = require('./userResolver');
 const productResolver = require('./productResolver');
 const orderResolver = require('./orderResolver');
-// require('dotenv').config({ path: './.env' });
+const specialQueriesResolver = require('./specialQueriesResolver');
 
 const resolvers = {
     Query: {
@@ -10,6 +10,7 @@ const resolvers = {
         ...userResolver.Query,
         ...productResolver.Query,
         ...orderResolver.Query,
+        ...specialQueriesResolver.Query,
     }, 
     Mutation: {
         ...clientResolver.Mutation,

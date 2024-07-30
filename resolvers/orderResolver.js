@@ -1,9 +1,7 @@
-const { Query } = require("./productResolver");
 const verifyUserExistsAndIsAuthorized = require("./utils/verifyUserExistAndIsAuthorized");
 const Client = require('../models/client');
 const Product = require('../models/product');
 const Order = require('../models/order');
-const { UserInputError } = require("apollo-server");
 const User = require('../models/user');
 
 const orderResolver = {
