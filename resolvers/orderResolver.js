@@ -37,7 +37,11 @@ const orderResolver = {
             } catch(e) {
                 console.log(e);
             }
-        }
+        },
+        getOrdersByState: async (_, { state }, ctx) => {
+            const orders = await Order.find({state, seller: ctx.user?.id});
+            return orders;
+        },
     }, 
     Mutation: {
         newOrder: async (_, {data}, ctx) => {
@@ -114,6 +118,7 @@ const orderResolver = {
             }
             
         },
+       
     }
 };
 

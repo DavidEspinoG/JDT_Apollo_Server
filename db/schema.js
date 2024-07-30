@@ -48,6 +48,7 @@ const typeDefs = gql`
         getAllOrders: [Order]
         getOrdersBySeller: [Order]
         getOrderById(id: ID!) : Order
+        getOrdersByState(state: OrderState) : [Order]
     }
 
     input newUserInput {
