@@ -72,8 +72,6 @@ const orderResolver = {
             }
             // Verify client exists 
             const client = await User.findById(ctx.user?.id);
-            console.log(client)
-            console.log(ctx)
             if(!client) {
                 throw new Error('Client not found');
             }
@@ -96,7 +94,26 @@ const orderResolver = {
             
             const res = await Order.findOneAndUpdate({_id: id}, input, { new: true});
             return res;
-        }
+        },
+        deleteOrder: async(_, {id}, ctx) => {
+            // Find the order
+            const order = await Order.findById(id);
+            // Verify the user is authorized 
+            if(!order){
+                throw new Error('Not found');
+            }
+            if(order?.seller._id.toString() !== ctx.user?.id) {
+                throw new Error('Unauthorized');
+            }
+            // Delete the order
+            const res = await Order.deleteOne({_id: id});
+            if(res.deletedCount > 0){
+                return 'Element deleted';
+            } else {
+                return 'Element not found';
+            }
+            
+        },
     }
 };
 

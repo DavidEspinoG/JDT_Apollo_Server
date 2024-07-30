@@ -133,6 +133,7 @@ const typeDefs = gql`
         # Order
         newOrder(data: NewOrderInput) : Order
         updateOrder(id: ID!, input: NewOrderInput) : Order
+        deleteOrder(id: ID!) : String
     }
     
 `;
