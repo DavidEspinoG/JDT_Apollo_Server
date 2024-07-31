@@ -106,6 +106,16 @@ const typeDefs = gql`
         CANCELED
     }
 
+    type TopClient {
+        total: Float
+        client: [Client]
+    }
+
+    type TopSeller {
+        total: Float
+        seller: [User]
+    }
+
     type Query {
         getUserFromToken(token: String) : User
         getProducts: [Product]
@@ -120,6 +130,7 @@ const typeDefs = gql`
         getOrdersByState(state: OrderState) : [Order]
         # Special queries
         getTopClients: [TopClient]
+        getTopSellers: [TopSeller]
     }
 
     type Mutation {
@@ -140,10 +151,6 @@ const typeDefs = gql`
         deleteOrder(id: ID!) : String
     }
     
-    type TopClient {
-        total: Float
-        client: [Client]
-    }
 
 `;
 
