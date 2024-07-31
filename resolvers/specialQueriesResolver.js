@@ -1,5 +1,5 @@
-const { Query } = require("./productResolver");
 const Order = require('../models/order');
+const Product = require('../models/product');
 
 const specialQueriesResolver = {
     Query: {
@@ -44,6 +44,10 @@ const specialQueriesResolver = {
             ])
             return sellers;
         },
+        searchProduct: async(_, { text }) => {
+            const products = await Product.find( { $text: { $search: text } }).limit(10);
+            return products;
+        }
     } 
 };
 
