@@ -17,7 +17,8 @@ const clientResolver = {
                 }
             }
         },
-        getClientsBySeller: async (_, { input }, ctx) => {
+        getClientsBySeller: async (_, { }, ctx) => {
+            if(!ctx.user) throw new Error('Unauthorized');
             try {
                 const clients = await Client.find({ seller: ctx.user.id.toString() });
                 return clients;

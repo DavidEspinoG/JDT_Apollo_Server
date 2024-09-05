@@ -117,7 +117,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        getUserFromToken(token: String) : User
+        getUserFromToken: User
         getProducts: [Product]
         getProduct(id: ID!) : Product
         getAllClients: [Client]

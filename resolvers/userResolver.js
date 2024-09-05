@@ -4,9 +4,8 @@ const bcrypt = require('bcrypt');
 
 const userResolver = {
     Query: {
-        getUserFromToken: (_, { token }) => {
-            const dataFromToken = jwt.verify(token, process.env.JWT_SECRET)
-            return dataFromToken;
+        getUserFromToken: (_, { token }, ctx) => {
+            return ctx.user;
         }, 
         
     },
