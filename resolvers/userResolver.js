@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const userResolver = {
     Query: {
-        getUserFromToken: (_, { token }, ctx) => {
+        getUserFromToken: (_, {},  ctx) => {
             return ctx.user;
         }, 
         
