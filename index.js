@@ -8,11 +8,16 @@ connectDB();
 const server = new ApolloServer({
     typeDefs, 
     resolvers,
+    introspection: true,
     context: ({req}) => {
         const token = req.headers['authorization'];
         let user; 
         if(token) {
-            user = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+            try {
+                user = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+            } catch(e) {
+                console.log(e)
+            }
         }
         return { user };
     }
