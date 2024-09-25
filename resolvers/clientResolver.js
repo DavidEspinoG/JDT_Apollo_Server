@@ -76,7 +76,7 @@ const clientResolver = {
             verifyUserExistAndIsAuthorized(client, ctx);
             try {
                 await Client.findByIdAndDelete(id);
-                return `Client with id ${id} succesfully deleted`;
+                return id;
             } catch(e){
                 throw new Error(e.message);
             }
